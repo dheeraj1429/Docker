@@ -1,0 +1,61 @@
+---------------------
+Create Network
+---------------------
+
+docker network create mern-app
+
+---------------------
+Create Volumes
+---------------------
+
+docker Volume create db-storage
+docker Volume create upload-storage
+
+---------------------
+Run MongoDB Container
+---------------------
+
+docker run --name mongodb \
+  -v db-storage:/data/db \
+  --rm \
+  -d \
+  --network mern-app \
+  mongo
+
+---------------------
+Build Node API Image
+---------------------
+
+docker build -t backend:v1 .
+
+---------------------
+Run Node API Container
+---------------------
+
+docker run --name goals-backend \
+  -v upload-storage:/app/upload \
+  -v /Users/dheeraj/Documents/MERN-Assignment/server:/app \
+  -v /app/node_modules \
+  --rm \
+  -d \
+  --network goals-net \
+  -p 8000:8000 \
+  backend
+
+---------------------
+Build React SPA Image
+---------------------
+
+docker build -t mern-frontend .
+
+---------------------
+Run React SPA Container
+---------------------
+
+docker run --name mern-frontend-c1 \
+  -v /Users/dheeraj/Documents/MERN-Assignment/client/src:/app/src \
+  --rm \
+  -d \
+  -p 3000:3000 \
+  -it \
+  mern-frontend
