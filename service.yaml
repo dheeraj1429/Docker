@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    group: service-label
+spec:
+  selector:
+    app: node-app
+    tier: backend
+  ports:
+    - protocol: "TCP"
+      port: 90
+      targetPort: 8080
+  type: LoadBalancer
